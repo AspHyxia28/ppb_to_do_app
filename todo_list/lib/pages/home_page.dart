@@ -124,15 +124,82 @@ class _HomePageState extends State<HomePage> {
                                   fontSize: 20,
                                 ),
                               ),
-                              trailing: IconButton(
-                                onPressed: () {
-                                  deleteTask(taskId: task.id);
-                                },
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.redAccent,
-                                  size: 30.0,
-                                ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      taskTextEditingController.text =
+                                          task.title;
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: const Text('Edit Tugas'),
+                                            content: TextField(
+                                              controller:
+                                                  taskTextEditingController,
+                                              decoration: const InputDecoration(
+                                                labelText: 'Edit Tugas Anda',
+                                              ),
+                                              maxLines: 2,
+                                            ),
+                                            actionsAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('Batal'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  if (taskTextEditingController
+                                                      .text
+                                                      .isNotEmpty) {
+                                                    final TaskModel
+                                                    updatedTask = TaskModel(
+                                                      id: task.id,
+                                                      title:
+                                                          taskTextEditingController
+                                                              .text,
+                                                      isCompleted:
+                                                          task.isCompleted,
+                                                    );
+                                                    updateTask(
+                                                      taskId: task.id,
+                                                      updatedTask: updatedTask,
+                                                    );
+                                                    taskTextEditingController
+                                                        .clear();
+                                                    Navigator.of(context).pop();
+                                                  }
+                                                },
+                                                child: const Text('Simpan'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      color: Colors.blueAccent,
+                                      size: 30.0,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      deleteTask(taskId: task.id);
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.redAccent,
+                                      size: 30.0,
+                                    ),
+                                  ),
+                                ],
                               ),
                             );
                           },
